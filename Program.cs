@@ -44,7 +44,7 @@ namespace jmatorrales.hospital
                             break;
 
                         case 5: // añadir medicamentos
-                            hospital.anadirMedicamento();
+                            hospital.anadirMedicamentoPaciente();
                             break;
 
                         case 6: // añadir pruebas

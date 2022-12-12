@@ -3,9 +3,11 @@ namespace jmatorrales.hospital
 {
     class Hospital
     {
-        private Dictionary<string, Paciente> listaHospital = new Dictionary<string, Paciente>();
+        private Dictionary<string, Paciente> _listaHospital = new Dictionary<string, Paciente>();
+        private Dictionary<string, Medicamentos> _listaMedicamentos = new Dictionary<string, Medicamentos>();
         private List<string> camas = new List<string>();
         private Paciente paciente;
+        private Medicamentos medicamentos;
 
         private List<string> listaMedicamentos = new List<string>()
             { "aspirina", "rinotizol", "cascahueton", "filecodeina", "surnorteina" };
@@ -40,9 +42,39 @@ namespace jmatorrales.hospital
                 camas.Add(idCama);
                 paciente.ingreso(nombre, direccion, dni, diagnostico, diasDeIngreso, pronostico, medicacion, pruebas);
 
-                listaHospital.Add(idCama, paciente);
+                _listaHospital.Add(idCama, paciente);
             }
-            catch(IOException ioex) { }
+            catch(IOException ioex) 
+            {
+                Console.WriteLine(ioex.Message);
+            }
+        }
+
+        public void añadirMedicamento()
+        {
+            medicamentos = new Medicamentos();
+            try
+            {
+                mostrar("Nombre del medicamento:");
+                string nombre = leerString();
+                mostrar("Indicaciones:");
+                string indicaciones = leerString();
+                mostrar("Efectos secundarios:");
+                string efSecundarios = leerString();
+                mostrar("Dosis:");
+                int dosis = leerInt();
+                mostrar("Efectos adversos:");
+                string efAdversos = leerString();
+                mostrar("Precio");
+                double precio = leerDouble();
+
+                medicamentos.nuevoMedicamento(nombre,indicaciones,efSecundarios,dosis,efAdversos, precio);
+                _listaMedicamentos.Add(nombre, medicamentos);
+            }
+            catch (IOException ioex) 
+            {
+                Console.WriteLine(ioex.Message);
+            }
         }
 
         public void altaPaciente() 
@@ -51,9 +83,9 @@ namespace jmatorrales.hospital
             {
                 mostrar("Indica el numero de cama: ");
                 String nCama = Console.ReadLine();
-                paciente = listaHospital[nCama];
+                paciente = _listaHospital[nCama];
                 paciente.altaPaciente();
-                listaHospital.Remove(nCama);
+                _listaHospital.Remove(nCama);
                 camas.Remove(nCama);
             }
             catch(IOException ioex) { }
@@ -68,7 +100,7 @@ namespace jmatorrales.hospital
                 String nCama = Console.ReadLine();
                 if(nCama != null)
                 {
-                    Paciente paciente = listaHospital[nCama];
+                    Paciente paciente = _listaHospital[nCama];
                     mostrar(" ");
                     mostrar($"Nombre: {paciente.nombre}");
                     mostrar($"Direccion: {paciente.direccion}");
@@ -113,7 +145,7 @@ namespace jmatorrales.hospital
                 String nCama = Console.ReadLine();
                 if (nCama != null)
                 {
-                    paciente = listaHospital[nCama];
+                    paciente = _listaHospital[nCama];
                     mostrar("Nuevo diagnostico: ");
                     string nuevoDiagnostico = Console.ReadLine();
                     paciente.diagnostico.Add(nuevoDiagnostico);
@@ -126,7 +158,7 @@ namespace jmatorrales.hospital
             catch (ArgumentException ae) { mostrar(ae.Message); }
         }
 
-        public void anadirMedicamento()
+        public void anadirMedicamentoPaciente()
         {
             try
             {
@@ -134,7 +166,7 @@ namespace jmatorrales.hospital
                 String nCama = Console.ReadLine();
                 if (nCama != null)
                 {
-                    paciente = listaHospital[nCama];
+                    paciente = _listaHospital[nCama];
                     string nuevoMedicamento = seleccionarMedicamento();
                     paciente.medicamentos.Add(nuevoMedicamento);
                 }
@@ -154,7 +186,7 @@ namespace jmatorrales.hospital
                 String nCama = Console.ReadLine();
                 if (nCama != null)
                 {
-                    paciente = listaHospital[nCama];
+                    paciente = _listaHospital[nCama];
                     string nuevaPrueba = seleccionarPrueba();
                     paciente.pruebas.Add(nuevaPrueba);
                 }
@@ -233,6 +265,20 @@ namespace jmatorrales.hospital
         private void mostrar(string txt)
         {
             Console.WriteLine(txt);
+        }
+
+        private string leerString()
+        {
+            return Console.ReadLine();
+        }
+
+        private int leerInt()
+        {
+            return Convert.ToInt32(Console.ReadLine());
+        }
+        private double leerDouble()
+        {
+            return Convert.ToDouble(Console.ReadLine());
         }
     }
 }
