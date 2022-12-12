@@ -5,15 +5,77 @@ namespace jmatorrales.hospital
     {
         private Dictionary<string, Paciente> _listaHospital = new Dictionary<string, Paciente>();
         private Dictionary<string, Medicamentos> _listaMedicamentos = new Dictionary<string, Medicamentos>();
+        private Dictionary<string, Morgue> _listaDefuncion = new Dictionary<string, Morgue>();
+
+        private List<string> idCuerpos = new List<string>();
         private List<string> camas = new List<string>();
         private Paciente paciente;
         private Medicamentos medicamentos;
+        private Morgue morgue;
 
         private List<string> listaMedicamentos = new List<string>()
             { "aspirina", "rinotizol", "cascahueton", "filecodeina", "surnorteina" };
 
         private List<string> listaPruebas = new List<string>()
         { "rayosX", "TAC", "medida azucar", "prueba de esfuerzo", "escanner" };
+
+
+        public void añadirMedicamentoHospital()
+        {
+            medicamentos = new Medicamentos();
+            try
+            {
+                mostrar("Nombre del medicamento:");
+                string nombre = leerString();
+                mostrar("Indicaciones:");
+                string indicaciones = leerString();
+                mostrar("Efectos secundarios:");
+                string efSecundarios = leerString();
+                mostrar("Dosis:");
+                int dosis = leerInt();
+                mostrar("Efectos adversos:");
+                string efAdversos = leerString();
+                mostrar("Precio");
+                double precio = leerDouble();
+
+                medicamentos.nuevoMedicamento(nombre, indicaciones, efSecundarios, dosis, efAdversos, precio);
+                _listaMedicamentos.Add(nombre, medicamentos);
+            }
+            catch (IOException ioex)
+            {
+                Console.WriteLine(ioex.Message);
+            }
+        }
+
+        public void mostrarMedicamentoHospital()
+        {
+            try
+            {
+                mostrar("Indica el nombre del medicamento: ");
+                string nombreMedicamento = leerString();
+                if (nombreMedicamento != null)
+                {
+                    Medicamentos med = _listaMedicamentos[nombreMedicamento];
+                    mostrar(" ");
+                    mostrar($"Nombre:\n {med.nombre}");
+                    mostrar($"Indicaciones:\n {med.indicaciones}");
+                    mostrar($"Efectos secundarios:  ");
+                    for (int i = 0; i < med.efectos_secundarios.Count; i++)
+                    {
+                        mostrar($"- {med.efectos_secundarios[i]}");
+                    }
+                    mostrar($"Dosis:\n {med.dosis} ml");
+                    mostrar($"Efectos advwersos");
+                    for (int i = 0; i < med.efectos_adversos.Count; i++)
+                    {
+                        mostrar($"- {med.efectos_adversos[i]}");
+                    }
+                    mostrar($"precio:\n {med.precio}");
+                }
+            }
+            catch (ArgumentException ae) { mostrar(ae.Message); }
+            catch (Exception ex) { mostrar(ex.Message); }
+        }
 
         public void ingresarPaciente()
         {
@@ -50,33 +112,6 @@ namespace jmatorrales.hospital
             }
         }
 
-        public void añadirMedicamento()
-        {
-            medicamentos = new Medicamentos();
-            try
-            {
-                mostrar("Nombre del medicamento:");
-                string nombre = leerString();
-                mostrar("Indicaciones:");
-                string indicaciones = leerString();
-                mostrar("Efectos secundarios:");
-                string efSecundarios = leerString();
-                mostrar("Dosis:");
-                int dosis = leerInt();
-                mostrar("Efectos adversos:");
-                string efAdversos = leerString();
-                mostrar("Precio");
-                double precio = leerDouble();
-
-                medicamentos.nuevoMedicamento(nombre,indicaciones,efSecundarios,dosis,efAdversos, precio);
-                _listaMedicamentos.Add(nombre, medicamentos);
-            }
-            catch (IOException ioex) 
-            {
-                Console.WriteLine(ioex.Message);
-            }
-        }
-
         public void altaPaciente() 
         {
             try
@@ -92,12 +127,89 @@ namespace jmatorrales.hospital
             mostrar("Se a eliminado lla ficha del paciente \n ");
         }
 
+        public void defuncionPaciente()
+        {
+            try
+            {
+                morgue = new Morgue();
+
+                mostrar("Indica el numero de cama:");
+                string nCama = leerString();
+                paciente = _listaHospital[nCama];
+                mostrar("Indica la fecha de defuncion");
+                string defuncion = leerString();
+
+                morgue.defuncion(paciente.nombre, paciente.direccion, paciente.dni, paciente.diagnostico,
+                    paciente.diasDeIngreso, paciente.pronostico, paciente.medicamentos, paciente.pruebas, defuncion);
+
+                mostrar("Indica el id de defuncion");
+                string idDefuncion = leerString();
+                idCuerpos.Add(idDefuncion);
+                _listaDefuncion.Add(idDefuncion, morgue);
+
+                paciente.altaPaciente();
+                _listaHospital.Remove(nCama);
+                camas.Remove(nCama);
+                
+            }
+            catch (IOException ioex)
+            {
+                Console.WriteLine(ioex.Message);
+            }
+            
+        }
+
+        public void mostrarDefuncionPaciente()
+        {
+            try
+            {
+                mostrar("Indica id de defuncion");
+                string idDef = leerString();
+                if(idDef != null)
+                {
+                    Morgue morgue = _listaDefuncion[idDef];
+                    mostrar(" ");
+                    mostrar($"Nombre: {morgue.nombre}");
+                    mostrar($"Direccion: {morgue.direccion}");
+                    mostrar($"DNI: {morgue.dni}");
+                    mostrar("Diagnostico: ");
+
+                    for (int i = 0; i < morgue.diagnostico.Count; i++)
+                    {
+                        mostrar($"- {morgue.diagnostico[i]}");
+                    }
+
+                    mostrar($"Dias de ingreso: {morgue.diasDeIngreso}");
+                    mostrar($"Pronostico: {morgue.pronostico}");
+                    mostrar("Medicamentos: ");
+
+                    for (int i = 0; i < morgue.medicamentos.Count; i++)
+                    {
+                        mostrar($"- {morgue.medicamentos[i]}");
+                    }
+
+                    mostrar("Pruebas: ");
+
+                    for (int i = 0; i < morgue.pruebas.Count; i++)
+                    {
+                        mostrar($"- {morgue.pruebas[i]}");
+                    }
+                }
+                else
+                {
+                    mostrar("Id no valido");
+                }
+            }
+            catch (ArgumentException ae) { mostrar(ae.Message); }
+            catch (Exception ex) { mostrar(ex.Message); }
+        }
+
         public void mostrarPaciente()
         {
             try
             {
                 mostrar("Indica el numero de cama: ");
-                String nCama = Console.ReadLine();
+                String nCama = leerString();
                 if(nCama != null)
                 {
                     Paciente paciente = _listaHospital[nCama];
@@ -212,7 +324,7 @@ namespace jmatorrales.hospital
                 Console.WriteLine("No hay camas asignadas");
             }
         }
-
+        
         private string seleccionarMedicamento()
         {
             int n = 1;
@@ -236,7 +348,7 @@ namespace jmatorrales.hospital
             }catch(Exception ex) {}
             return null;
         }
-
+        
         private string seleccionarPrueba()
         {
             int n = 1;
@@ -261,24 +373,26 @@ namespace jmatorrales.hospital
             catch (Exception ex) { }
             return null;
         }
-
+        
         private void mostrar(string txt)
         {
             Console.WriteLine(txt);
         }
-
+        
         private string leerString()
         {
             return Console.ReadLine();
         }
-
+        
         private int leerInt()
         {
             return Convert.ToInt32(Console.ReadLine());
         }
+        
         private double leerDouble()
         {
             return Convert.ToDouble(Console.ReadLine());
         }
+    
     }
 }

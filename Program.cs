@@ -20,18 +20,20 @@ namespace jmatorrales.hospital
                 {
                     Console.WriteLine("1. Registrar paciente \n2. Dar de alta a paciente " +
                         "\n3. Mostrar datos paciente \n4. Añadir diagnostico" +
-                        "\n5. Añadir medicamento \n6. Añadir prueba" +
-                        "\n7. Ver lista de camas \n0. Salir");
+                        "\n5. Añadir medicamento al paciente \n6. Añadir prueba al paciente" +
+                        "\n7. Añadir medicamento al hospital \n8. Mostrar medicamento del hopital " +
+                        "\n9. Defuncion paciente \n10. Ver paciente defuncion" +
+                        "\n11. Ver lista de camas \n0. Salir");
 
                     int opcion = Convert.ToInt32(Console.ReadLine());
 
                     switch (opcion)
                     {
-                        case 1: // registrar
+                        case 1: // registrar paciente
                             hospital.ingresarPaciente();
                             break;
 
-                        case 2: // dar de alta
+                        case 2: // dar de alta al paciente
                             hospital.altaPaciente();
                             break;
 
@@ -39,19 +41,35 @@ namespace jmatorrales.hospital
                             hospital.mostrarPaciente();
                             break;
 
-                        case 4: // añadir diagnostico
+                        case 4: // añadir diagnostico al paciente
                             hospital.anadirDiagnostico();
                             break;
 
-                        case 5: // añadir medicamentos
+                        case 5: // añadir medicamentos al paciente
                             hospital.anadirMedicamentoPaciente();
                             break;
 
-                        case 6: // añadir pruebas
+                        case 6: // añadir pruebas al paciente
                             hospital.anadirPrueba();
-                            break; 
+                            break;
+
+                        case 7: // añadir medicamento hospital
+                            hospital.añadirMedicamentoHospital();
+                            break;
+
+                        case 8: // mostrar medicamento hospital
+                            hospital.mostrarMedicamentoHospital();
+                            break;
+
+                        case 9: // defuncion paciente
+                            hospital.defuncionPaciente();
+                            break;
+
+                        case 10: // mostrar defuncion paciente
+                            hospital.mostrarDefuncionPaciente();
+                            break;
                         
-                        case 7:// ver lista camas
+                        case 11:// ver lista camas
                             hospital.verCamas();
                             break;
 
