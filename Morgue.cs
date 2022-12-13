@@ -6,31 +6,30 @@ class Morgue: Cuerpo
     public char pronostico { get; set; }
     public List<string> medicamentos = new List<string>();
     public List<string> pruebas = new List<string>();
-    public string fechaDefuncion { get; set; }
+    public DateTime fechaDefuncion { get; set; }
 
     public void defuncion(string nombre, string direccion, string dni, List<string> diagnostico,
-        int diasDeIngreso, char pronostico, List<string> medicacion, List<string> pruebas, string fechaDefuncion)
+        int diasDeIngreso, char pronostico, List<string> medicamentos, List<string> pruebas, DateTime fechaDefuncion)
     {
         this.nombre = nombre;
         this.direccion = direccion;
         this.dni = dni;
 
-        for(int i = 0; diagnostico.Count > 0; i++)
+        for(int i = 0; i < diagnostico.Count; i++)
         {
             this.diagnostico.Add(diagnostico[i]);
         }
-
         
         this.diasDeIngreso = diasDeIngreso;
         this.pronostico = pronostico;
 
-        for(int i=0; medicamentos.Count> 0; i++)
+        for(int i=0; i < medicamentos.Count; i++)
         {
-            medicamentos.Add(medicacion[i]);
+            this.medicamentos.Add(medicamentos[i]);
         }
-        for (int i = 0; pruebas.Count > 0; i++)
+        for (int i = 0; i < pruebas.Count; i++)
         {
-            medicamentos.Add(pruebas[i]);
+            this.pruebas.Add(pruebas[i]);
         }
 
         this.fechaDefuncion = fechaDefuncion;

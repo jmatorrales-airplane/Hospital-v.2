@@ -136,11 +136,11 @@ namespace jmatorrales.hospital
                 mostrar("Indica el numero de cama:");
                 string nCama = leerString();
                 paciente = _listaHospital[nCama];
-                mostrar("Indica la fecha de defuncion");
-                string defuncion = leerString();
+                mostrar("fecha de defuncion: ");
+                DateTime fechaDefuncion = leerDatetime();
 
                 morgue.defuncion(paciente.nombre, paciente.direccion, paciente.dni, paciente.diagnostico,
-                    paciente.diasDeIngreso, paciente.pronostico, paciente.medicamentos, paciente.pruebas, defuncion);
+                    paciente.diasDeIngreso, paciente.pronostico, paciente.medicamentos, paciente.pruebas, fechaDefuncion);
 
                 mostrar("Indica el id de defuncion");
                 string idDefuncion = leerString();
@@ -194,6 +194,7 @@ namespace jmatorrales.hospital
                     {
                         mostrar($"- {morgue.pruebas[i]}");
                     }
+                    mostrar($"Fecha de defuncion: {morgue.fechaDefuncion}");
                 }
                 else
                 {
@@ -381,7 +382,18 @@ namespace jmatorrales.hospital
         
         private string leerString()
         {
-            return Console.ReadLine();
+            string x = Console.ReadLine();
+
+            if(x != null)
+            {
+                return x;
+            }
+            else
+            {
+                mostrar("No puede estar vacio, vuelve a intentarlo:");
+                leerString();
+            }
+            return "Null";            
         }
         
         private int leerInt()
@@ -393,6 +405,34 @@ namespace jmatorrales.hospital
         {
             return Convert.ToDouble(Console.ReadLine());
         }
-    
+        
+        private DateTime leerDatetime()
+        {
+            try
+            {
+                mostrar("- Indica el dia:");
+                int dia = leerInt();
+                mostrar("- Indica el mes:");
+                int mes = leerInt();
+                mostrar("- Indica el año:");
+                int ano = leerInt();
+                mostrar("- Indica la hora:");
+                int hora = leerInt();
+                mostrar("Indica los minutos");
+                int minutos = leerInt();
+
+                DateTime date = new DateTime(ano, mes, dia, hora, minutos, 0);
+
+                return date;
+            }
+            catch(ArgumentOutOfRangeException aore) 
+            { 
+                mostrar("Fecha no valida, vueve a intentarlo.");
+                mostrar(aore.Message);
+                leerDatetime();
+            }
+
+            return default;
+        }
     }
 }
